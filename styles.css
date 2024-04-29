@@ -1,0 +1,56 @@
+:root {
+    --title-color: #A66249;
+    --footer-color: #F2D9D0;
+    --background-color: #D9A796;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+}
+
+header {
+    height: 20%;
+    background-color: var(--title-color);
+}
+
+#buttons {
+    height: 15%;
+    background-color: var(--title-color);
+}
+
+footer {
+    height: 5%;
+    background-color: var(--footer-color);
+}
+
+.content {
+    width: min(100vw, 60vh);
+    height: min(100vh, 420vw);
+    background-color: orange;
+    margin: 0 auto;
+}
+
+#playfield {
+    height: 60vh;
+    width: 60vh;
+    background-color: var(--background-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.cell {
+    height: calc((100% / 9) - 4px);
+    width: calc((100% / 9) - 4px);
+    margin: 2px;
+    background-color: var(--footer-color);
+    border: 1px solid black;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
