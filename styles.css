@@ -11,11 +11,27 @@
 
 html, body {
     height: 100%;
+    font-family: 'Book Antiqua', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 header {
-    height: 20%;
+    padding: 10px;
+    height: 20vh;
     background-color: var(--title-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-title {
+    font-size: 1em;
+    color: var(--footer-color);
+}
+
+.limiter-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 #buttons {
@@ -24,8 +40,12 @@ header {
 }
 
 footer {
+    padding: 10px;
     height: 5%;
     background-color: var(--footer-color);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 .content {
