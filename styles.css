@@ -22,8 +22,8 @@ header {
     height: 20vh;
     background-color: var(--title-color);
     display: flex;
-    align-items: center;
-    justify-content: center;
+    /* align-items: center;
+    justify-content: center; */
 }
 
 .header-title {
@@ -72,13 +72,13 @@ footer {
     height: calc((100% / 9) - 4px);
     width: calc((100% / 9) - 4px);
     margin: 1px;
-    background-color: lightgray;
+    background-color: #acacac;
     border: var(--shadowsize) transparent solid;
     box-sizing: border-box;
     flex-shrink: 0;
 }
 
-.covered {
+.cell.covered {
     background-color: lightgray;
     border-top: var(--shadowsize) solid var(--highlightcolor);
     border-left: var(--shadowsize) solid var(--highlightcolor);
