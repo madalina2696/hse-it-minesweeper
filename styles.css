@@ -2,6 +2,9 @@
     --title-color: #A66249;
     --footer-color: #F2D9D0;
     --background-color: #D9A796;
+    --shadowsize: 5px;
+    --shadowcolor: darkgray;
+    --highlightcolor: white;
 }
 
 * {
@@ -58,7 +61,7 @@ footer {
 #playfield {
     height: 60vh;
     width: 60vh;
-    background-color: var(--background-color);
+    background-color: gray;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -68,9 +71,17 @@ footer {
 .cell {
     height: calc((100% / 9) - 4px);
     width: calc((100% / 9) - 4px);
-    margin: 2px;
-    background-color: var(--footer-color);
-    border: 1px solid black;
+    margin: 1px;
+    background-color: lightgray;
+    border: var(--shadowsize) transparent solid;
     box-sizing: border-box;
     flex-shrink: 0;
+}
+
+.covered {
+    background-color: lightgrays;
+    border-top: var(--shadowsize) solid var(--highlightcolor);
+    border-left: var(--shadowsize) solid var(--highlightcolor);
+    border-bottom: var(--shadowsize) solid var(--shadowcolor);
+    border-right: var(--shadowsize) solid var(--shadowcolor);
 }
