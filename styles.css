@@ -79,9 +79,15 @@ footer {
 }
 
 .covered {
-    background-color: lightgrays;
+    background-color: lightgray;
     border-top: var(--shadowsize) solid var(--highlightcolor);
     border-left: var(--shadowsize) solid var(--highlightcolor);
     border-bottom: var(--shadowsize) solid var(--shadowcolor);
     border-right: var(--shadowsize) solid var(--shadowcolor);
+}
+
+.cell.symbol {
+    background-image: url("images/symbols.svg");
+    background-size: cover;
+    background-repeat: no-repeat;
 }
