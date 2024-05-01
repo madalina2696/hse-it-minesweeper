@@ -91,3 +91,43 @@ footer {
     background-size: cover;
     background-repeat: no-repeat;
 }
+
+.cell.symbol.s1 {
+    background-position: 0%;
+}
+
+.cell.symbol.s2 {
+    background-position: 11%;
+}
+
+.cell.symbol.s3 {
+    background-position: 22%;
+}
+
+.cell.symbol.s4 {
+    background-position: 33%;
+}
+
+.cell.symbol.s5 {
+    background-position: 44%;
+}
+
+.cell.symbol.s6 {
+    background-position: 55%;
+}
+
+.cell.symbol.s7 {
+    background-position: 66%;
+}
+
+.cell.symbol.s8 {
+    background-position: 77%;
+}
+
+.cell.symbol.flag {
+    background-position: 88%;
+}
+
+.cell.symbol.mine {
+    background-position: 99%;
+}
