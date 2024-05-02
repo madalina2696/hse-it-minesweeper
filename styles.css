@@ -1,7 +1,7 @@
 :root {
-    --title-color: #10403B;
-    --footer-color: #BFBFBF;
-    --background-color: #BFBFBF;
+    --title-color: #10403b;
+    --footer-color: #bfbfbf;
+    --background-color: #bfbfbf;
     --shadowsize: 5px;
     --shadowcolor: darkgray;
     --highlightcolor: white;
@@ -12,9 +12,10 @@
     padding: 0;
 }
 
-html, body {
+html,
+body {
     height: 100%;
-    font-family: 'Book Antiqua', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Book Antiqua", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .content {
@@ -26,7 +27,7 @@ html, body {
 
 header {
     height: 20%;
-    background-image: url("images/title_image1.webp");
+    background-image: url("images/title_image1.png");
     background-size: cover;
     background-position: center;
 }
@@ -65,13 +66,17 @@ header {
     border-radius: 5px;
     font-size: 1em;
     cursor: pointer;
-    font-family: 'Book Antiqua', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: large;
+    font-family: "Book Antiqua", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .button-small:hover {
     background-color: rgb(162, 162, 162);
-    font-family: 'Book Antiqua', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: "Book Antiqua", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.limiter.footer.author {
+    font-size: 1em;
+    padding: 10px;
 }
 
 footer {
