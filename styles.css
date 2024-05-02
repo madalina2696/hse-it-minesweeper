@@ -4,19 +4,42 @@
     --background-color: #D9A796;
 }
 
+/* @media only screen and (min-width: 600px) {
+    #playfield {
+        width: min(60vw, 60vh);
+        height: min(60vw, 60vh);
+        background-color: yellow;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .cell {
+        height: calc((100% / 9) - 4px);
+        width: calc((100% / 9) - 4px);
+        margin: 2px;
+        background-color: yellow;
+        border: 1px solid black;
+        box-sizing: border-box;
+        flex-shrink: 0;
+    }
+} */
+
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     height: 100%;
     font-family: 'Book Antiqua', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 header {
-    padding: 10px;
-    height: 20vh;
+    height: 15%;
     background-color: var(--title-color);
     display: flex;
     align-items: center;
@@ -24,7 +47,7 @@ header {
 }
 
 .header-title {
-    font-size: 1em;
+    font-size: 1rem;
     color: var(--footer-color);
 }
 
@@ -40,25 +63,25 @@ header {
 }
 
 footer {
-    padding: 10px;
-    height: 5%;
+    height: 10%;
     background-color: var(--footer-color);
     display: flex;
     flex-direction: row;
     align-items: center;
+    padding: 10px;
 }
 
 .content {
-    width: min(100vw, 60vh);
-    height: min(100vh, 420vw);
+    width: min(100vw, 50vw);
+    height: min(100vh, 200vw);
     background-color: orange;
     margin: 0 auto;
 }
 
 #playfield {
-    height: 60vh;
-    width: 60vh;
-    background-color: var(--background-color);
+    width: min(50vw, 50vh);
+    height: min(50vw, 50vh);
+    background-color: blueviolet;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -68,9 +91,8 @@ footer {
 .cell {
     height: calc((100% / 9) - 4px);
     width: calc((100% / 9) - 4px);
-    margin: 2px;
+    margin: 1px;
     background-color: var(--footer-color);
     border: 1px solid black;
-    box-sizing: border-box;
     flex-shrink: 0;
 }
