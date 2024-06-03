@@ -1,121 +1,38 @@
 <!DOCTYPE html>
 <html lang="de">
-  <head>
+<head>
     <meta charset="utf-8" />
-    <title>Lab1 HTML of Madalina-Iulia Militaru</title>
+    <title>Lab2 JavaScript of Madalina-Iulia Militaru</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="data:;base64,=" />
     <link rel="stylesheet" href="styles.css" />
-    <script src=""></script>
-  </head>
-  <body>
+    <script src="script.js" defer></script>
+</head>
+<body>
     <div class="content">
-      <header>
-        <div>
-          <div class="header-content">
-            <div class="header-title">
-              <h1>Minesweeper</h1>
+        <header>
+            <div>
+                <div class="header-content">
+                    <div class="header-title">
+                        <h1>Minesweeper</h1>
+                    </div>
+                    <div class="header-subtitle">
+                        <p>by Madalina-Iulia Militaru</p>
+                    </div>
+                </div>
             </div>
-            <div class="header-subtitle">
-              <p>by Madalina-Iulia Militaru</p>
+        </header>
+        <div id="playfield"></div>
+        <div id="buttons">
+            <button class="button-small" id="game-s">Small</button>
+            <button class="button-small" id="game-m">Medium</button>
+            <button class="button-small" id="game-l">Large</button>
+        </div>
+        <footer>
+            <div class="limiter footer author">
+                <p>&copy; 2024 by Madalina-Iulia Militaru</p>
             </div>
-          </div>
-        </div>
-      </header>
-      <div id="playfield">
-        <!-- .cell*81 -->
-        <div class="cell"></div>
-        <div class="cell symbol s1"></div>
-        <div class="cell symbol mine"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell symbol s1"></div>
-        <div class="cell symbol s2"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered symbol flag"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-        <div class="cell covered"></div>
-      </div>
-      <div id="buttons">
-        <button class="button-small" id="game-s">Small</button>
-        <button class="button-small" id="game-m">Medium</button>
-        <button class="button-small" id="game-l">Large</button>
-      </div>
-      <footer>
-        <div class="limiter footer author">
-          <p>&copy; 2024 by Madalina-Iulia Militaru</p>
-        </div>
-      </footer>
+        </footer>
     </div>
-  </body>
+</body>
 </html>
