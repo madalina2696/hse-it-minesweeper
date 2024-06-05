@@ -1,4 +1,4 @@
-window.addEventListener('load', () => minesweeper.init(), console.error);
+window.addEventListener('load', async () => await minesweeper.init(), console.error);
 
 const minesweeper = {
     gametypes: [
@@ -7,17 +7,17 @@ const minesweeper = {
         { name: 'Large', size: 24, mines: 150 }
     ],
     gameover: false,
-    init() {
+    async init() {
         this.logic = localLogic;
-        this.generateBlocks();
-        this.newGame('Small');
+        await this.generateBlocks();
+        await this.newGame('Small');
     },
-    generateBlocks() {
-        document.getElementById('game-s').addEventListener('click', () => this.newGame('Small'));
-        document.getElementById('game-m').addEventListener('click', () => this.newGame('Medium'));
-        document.getElementById('game-l').addEventListener('click', () => this.newGame('Large'));
+    async generateBlocks() {
+        document.getElementById('game-s').addEventListener('click', async () => await this.newGame('Small'));
+        document.getElementById('game-m').addEventListener('click', async () => await this.newGame('Medium'));
+        document.getElementById('game-l').addEventListener('click', async () => await this.newGame('Large'));
     },
-    fillPlayfield() {
+    async fillPlayfield() {
         const playfield = document.getElementById('playfield');
         playfield.innerHTML = '';
         const size = this.size;
@@ -27,7 +27,7 @@ const minesweeper = {
 
         for (let row = 0; row < size; row++) {
             for (let column = 0; column < size; column++) {
-                const cell = this.generateCell(row, column);
+                const cell = await this.generateCell(row, column);
                 playfield.appendChild(cell);
             }
         }
@@ -44,19 +44,19 @@ const minesweeper = {
             }
         });
     },
-    generateCell(row, column) {
+    async generateCell(row, column) {
         const cell = document.createElement('div');
         cell.classList.add('cell', 'covered');
         cell.dataset.x = row;
         cell.dataset.y = column;
 
-        cell.addEventListener('click', (event) => this.cellClicked(event));
-        cell.addEventListener('contextmenu', (event) => this.cellRightClick(event));
-        cell.addEventListener('touchstart', (event) => this.touchStart(event));
-        cell.addEventListener('touchend', (event) => this.touchEnd(event));
+        cell.addEventListener('click', async (event) => await this.cellClicked(event));
+        cell.addEventListener('contextmenu', async (event) => await this.cellRightClick(event));
+        cell.addEventListener('touchstart', async (event) => await this.touchStart(event));
+        cell.addEventListener('touchend', async (event) => await this.touchEnd(event));
         return cell;
     },
-    newGame(gametype) {
+    async newGame(gametype) {
         this.gameover = false;
         for (const type of this.gametypes) {
             if (type.name === gametype) {
@@ -64,13 +64,13 @@ const minesweeper = {
                 this.mines = type.mines;
             }
         }
-        this.fillPlayfield();
-        this.logic.init(this.size, this.mines);
+        await this.fillPlayfield();
+        await this.logic.init(this.size, this.mines);
     },
     getCell(x, y) {
         return document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
     },
-    placeSymbol(x, y, symbol, mineHit) {
+    async placeSymbol(x, y, symbol, mineHit) {
         const cell = this.getCell(x, y);
         cell.classList.remove('covered', 'flag');
 
@@ -85,7 +85,7 @@ const minesweeper = {
             }
         }
     },
-    cellClicked(event) {
+    async cellClicked(event) {
         if (this.gameover) return;
 
         const x = parseInt(event.target.dataset.x);
@@ -97,7 +97,7 @@ const minesweeper = {
         if (cell.classList.contains('flag')) {
             cell.classList.remove('flag');
         } else {
-            const mineHit = this.logic.sweep(x, y);
+            const mineHit = await this.logic.sweep(x, y);
 
             console.log('Clicked cell at:', x, y, 'mineHit:', mineHit);
 
@@ -106,16 +106,16 @@ const minesweeper = {
                 this.displayOverlay('You lose!');
                 this.gameover = true;
                 event.target.classList.add('minehit');
-                this.placeSymbol(x, y, 'mine');
+                await this.placeSymbol(x, y, 'mine');
 
-                mineHit.mines.forEach(mine => {
-                    this.placeSymbol(mine.x, mine.y, 'mine');
+                mineHit.mines.forEach(async mine => {
+                    await this.placeSymbol(mine.x, mine.y, 'mine');
                 });
             } else {
                 console.log('No mine hit at:', x, y);  // Debug statement
-                this.placeSymbol(x, y, null, mineHit);
+                await this.placeSymbol(x, y, null, mineHit);
                 if (mineHit.emptyCells) {
-                    mineHit.emptyCells.forEach(cell => this.placeSymbol(cell.x, cell.y, null, cell));
+                    mineHit.emptyCells.forEach(async cell => await this.placeSymbol(cell.x, cell.y, null, cell));
                 }
                 if (mineHit.userWins) {
                     this.displayOverlay('You win!');
@@ -124,7 +124,7 @@ const minesweeper = {
             }
         }
     },
-    cellRightClick(event) {
+    async cellRightClick(event) {
         if (this.gameover) return;
 
         const x = event.target.dataset.x;
@@ -133,16 +133,16 @@ const minesweeper = {
         const cell = this.getCell(x, y);
         cell.classList.toggle('flag');
     },
-    touchStart(event) {
+    async touchStart(event) {
         this.startMillisec = new Date().getTime();
         event.preventDefault();
     },
-    touchEnd(event) {
+    async touchEnd(event) {
         const endMillisec = new Date().getTime() - this.startMillisec;
         if (endMillisec < 500) {
-            this.cellClicked(event);
+            await this.cellClicked(event);
         } else {
-            this.cellRightClick(event);
+            await this.cellRightClick(event);
         }
     },
     displayOverlay(text) {
@@ -166,7 +166,7 @@ const minesweeper = {
 
 const localLogic = {
     moveCounter: 0,
-    init(size, mines) {
+    async init(size, mines) {
         this.field = [];
         this.size = size;
         this.mines = mines;
@@ -185,7 +185,7 @@ const localLogic = {
         }
         console.dir(this.field);
     },
-    placeSingleMine(x, y) {
+    async placeSingleMine(x, y) {
         while (true) {
             const tryX = Math.floor(Math.random() * this.size);
             const tryY = Math.floor(Math.random() * this.size);
@@ -196,26 +196,26 @@ const localLogic = {
             return;
         }
     },
-    placeMines(x, y) {
+    async placeMines(x, y) {
         for (let i = 0; i < this.mines; i++) {
-            this.placeSingleMine(x, y);
+            await this.placeSingleMine(x, y);
         }
     },
-    sweep(x, y) {
+    async sweep(x, y) {
         x = parseInt(x);
         y = parseInt(y);
         if (this.moveCounter === 0) {
-            this.placeMines(x, y);
+            await this.placeMines(x, y);
         }
         this.moveCounter++;
 
         const mineHit = this.field[x][y];
         if (mineHit) {
             console.log('Mine hit:', { x, y }); // Debug statement
-            return { mineHit: true, mines: this.collectMines() };
+            return { mineHit: true, mines: await this.collectMines() };
         } else {
-            const minesAround = this.countMinesAround(x, y);
-            const emptyCells = minesAround > 0 ? undefined : this.getEmptyCells(x, y);
+            const minesAround = await this.countMinesAround(x, y);
+            const emptyCells = minesAround > 0 ? undefined : await this.getEmptyCells(x, y);
 
             this.uncoveredCells[x][y] = true;
             if (emptyCells) {
@@ -224,7 +224,7 @@ const localLogic = {
                 });
             }
 
-            const uncoveredCount = this.countUncoveredCells();
+            const uncoveredCount = await this.countUncoveredCells();
             const totalCells = this.size * this.size;
             const mineCount = this.mines;
 
@@ -236,7 +236,7 @@ const localLogic = {
             }
         }
     },
-    collectMines() {
+    async collectMines() {
         const mineCollection = [];
         for (let row = 0; row < this.size; row++) {
             for (let col = 0; col < this.size; col++) {
@@ -247,7 +247,7 @@ const localLogic = {
         }
         return mineCollection;
     },
-    countUncoveredCells() {
+    async countUncoveredCells() {
         let count = 0;
         for (let row = 0; row < this.size; row++) {
             for (let col = 0; col < this.size; col++) {
@@ -258,7 +258,7 @@ const localLogic = {
         }
         return count;
     },
-    countMinesAround(x, y) {
+    async countMinesAround(x, y) {
         let count = 0;
         for (let dx = -1; dx <= 1; dx++) {
             for (let dy = -1; dy <= 1; dy++) {
@@ -279,27 +279,27 @@ const localLogic = {
         }
         return this.field[x][y];
     },
-    getNeighbors(x, y) {
+    async getNeighbors(x, y) {
         const neighbors = [];
         for (let dx = -1; dx <= 1; dx++) {
             for (let dy = -1; dy <= 1; dy++) {
                 const cell = this.getSafe(x + dx, y + dy);
                 if (cell === false) {
-                    const minesAround = this.countMinesAround(x + dx, y + dy);
+                    const minesAround = await this.countMinesAround(x + dx, y + dy);
                     neighbors.push({ x: x + dx, y: y + dy, minesAround });
                 }
             }
         }
         return neighbors;
     },
-    getEmptyCells(x, y) {
+    async getEmptyCells(x, y) {
         const toDo = [{ x, y, minesAround: 0 }];
         const done = [];
 
         while (toDo.length) {
             const actual = toDo.shift();
             done.push(actual);
-            const neighbors = this.getNeighbors(actual.x, actual.y);
+            const neighbors = await this.getNeighbors(actual.x, actual.y);
             for (const neighbor of neighbors) {
                 if (this.inList(done, neighbor)) continue;
 
