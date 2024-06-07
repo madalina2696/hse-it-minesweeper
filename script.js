@@ -1,25 +1,35 @@
-window.addEventListener('load', async () => await minesweeper.init(), console.error);
+window.addEventListener(
+    "load",
+    async () => await minesweeper.init(),
+    console.error
+);
 
 const minesweeper = {
     gametypes: [
-        { name: 'Small', size: 9, mines: 10 },
-        { name: 'Medium', size: 16, mines: 40 },
-        { name: 'Large', size: 24, mines: 150 }
+        { name: "Small", size: 9, mines: 10 },
+        { name: "Medium", size: 16, mines: 40 },
+        { name: "Large", size: 24, mines: 150 },
     ],
     gameover: false,
     async init() {
-        this.logic = localLogic;
+        this.logic = remoteLogic;
         await this.generateBlocks();
-        await this.newGame('Small');
+        await this.newGame("Small");
     },
     async generateBlocks() {
-        document.getElementById('game-s').addEventListener('click', async () => await this.newGame('Small'));
-        document.getElementById('game-m').addEventListener('click', async () => await this.newGame('Medium'));
-        document.getElementById('game-l').addEventListener('click', async () => await this.newGame('Large'));
+        document
+            .getElementById("game-s")
+            .addEventListener("click", async () => await this.newGame("Small"));
+        document
+            .getElementById("game-m")
+            .addEventListener("click", async () => await this.newGame("Medium"));
+        document
+            .getElementById("game-l")
+            .addEventListener("click", async () => await this.newGame("Large"));
     },
     async fillPlayfield() {
-        const playfield = document.getElementById('playfield');
-        playfield.innerHTML = '';
+        const playfield = document.getElementById("playfield");
+        playfield.innerHTML = "";
         const size = this.size;
 
         playfield.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
@@ -32,28 +42,40 @@ const minesweeper = {
             }
         }
 
-        playfield.addEventListener('mouseenter', () => {
+        playfield.addEventListener("mouseenter", () => {
             if (this.gameover) {
-                document.querySelector('.overlay').style.display = 'flex';
+                document.querySelector(".overlay").style.display = "flex";
             }
         });
 
-        playfield.addEventListener('mouseleave', () => {
+        playfield.addEventListener("mouseleave", () => {
             if (this.gameover) {
-                document.querySelector('.overlay').style.display = 'none';
+                document.querySelector(".overlay").style.display = "none";
             }
         });
     },
     async generateCell(row, column) {
-        const cell = document.createElement('div');
-        cell.classList.add('cell', 'covered');
+        const cell = document.createElement("div");
+        cell.classList.add("cell", "covered");
         cell.dataset.x = row;
         cell.dataset.y = column;
 
-        cell.addEventListener('click', async (event) => await this.cellClicked(event));
-        cell.addEventListener('contextmenu', async (event) => await this.cellRightClick(event));
-        cell.addEventListener('touchstart', async (event) => await this.touchStart(event));
-        cell.addEventListener('touchend', async (event) => await this.touchEnd(event));
+        cell.addEventListener(
+            "click",
+            async (event) => await this.cellClicked(event)
+        );
+        cell.addEventListener(
+            "contextmenu",
+            async (event) => await this.cellRightClick(event)
+        );
+        cell.addEventListener(
+            "touchstart",
+            async (event) => await this.touchStart(event)
+        );
+        cell.addEventListener(
+            "touchend",
+            async (event) => await this.touchEnd(event)
+        );
         return cell;
     },
     async newGame(gametype) {
@@ -72,16 +94,16 @@ const minesweeper = {
     },
     async placeSymbol(x, y, symbol, mineHit) {
         const cell = this.getCell(x, y);
-        cell.classList.remove('covered', 'flag');
+        cell.classList.remove("covered", "flag");
 
         if (symbol) {
-            cell.classList.add('symbol', symbol);
+            cell.classList.add("symbol", symbol);
         }
         if (mineHit) {
             if (mineHit.minesAround) {
-                cell.classList.add('symbol', 's' + mineHit.minesAround);
+                cell.classList.add("symbol", "s" + mineHit.minesAround);
             } else {
-                cell.classList.add('symbol', 'emptySymbol');
+                cell.classList.add("symbol", "emptySymbol");
             }
         }
     },
@@ -93,32 +115,33 @@ const minesweeper = {
         event.preventDefault();
         const cell = this.getCell(x, y);
 
-        // Remove flag if present
-        if (cell.classList.contains('flag')) {
-            cell.classList.remove('flag');
+        if (cell.classList.contains("flag")) {
+            cell.classList.remove("flag");
         } else {
             const mineHit = await this.logic.sweep(x, y);
 
-            console.log('Clicked cell at:', x, y, 'mineHit:', mineHit);
+            /* console.log("Clicked cell at:", x, y, "mineHit:", mineHit); */
 
             if (mineHit.mineHit) {
-                console.log('Mine was hit at:', x, y);
-                this.displayOverlay('You lose!');
+                console.log("Mine was hit at:", x, y);
+                this.displayOverlay("You lose!");
                 this.gameover = true;
-                event.target.classList.add('minehit');
-                await this.placeSymbol(x, y, 'mine');
+                event.target.classList.add("minehit");
+                await this.placeSymbol(x, y, "mine");
 
-                mineHit.mines.forEach(async mine => {
-                    await this.placeSymbol(mine.x, mine.y, 'mine');
+                mineHit.mines.forEach(async (mine) => {
+                    await this.placeSymbol(mine.x, mine.y, "mine");
                 });
             } else {
-                console.log('No mine hit at:', x, y);  // Debug statement
+                /* console.log("No mine hit at:", x, y); */
                 await this.placeSymbol(x, y, null, mineHit);
                 if (mineHit.emptyCells) {
-                    mineHit.emptyCells.forEach(async cell => await this.placeSymbol(cell.x, cell.y, null, cell));
+                    mineHit.emptyCells.forEach(
+                        async (cell) => await this.placeSymbol(cell.x, cell.y, null, cell)
+                    );
                 }
                 if (mineHit.userWins) {
-                    this.displayOverlay('You win!');
+                    this.displayOverlay("You win!");
                     this.gameover = true;
                 }
             }
@@ -131,7 +154,7 @@ const minesweeper = {
         const y = event.target.dataset.y;
         event.preventDefault();
         const cell = this.getCell(x, y);
-        cell.classList.toggle('flag');
+        cell.classList.toggle("flag");
     },
     async touchStart(event) {
         this.startMillisec = new Date().getTime();
@@ -146,22 +169,22 @@ const minesweeper = {
         }
     },
     displayOverlay(text) {
-        let overlay = document.querySelector('.overlay');
+        let overlay = document.querySelector(".overlay");
         if (!overlay) {
-            overlay = document.createElement('div');
-            overlay.classList.add('overlay');
+            overlay = document.createElement("div");
+            overlay.classList.add("overlay");
 
-            const textHolder = document.createElement('div');
-            textHolder.classList.add('overlay-text');
+            const textHolder = document.createElement("div");
+            textHolder.classList.add("overlay-text");
             textHolder.innerText = text;
 
             overlay.appendChild(textHolder);
             document.body.appendChild(overlay);
         } else {
-            overlay.querySelector('.overlay-text').innerText = text;
-            overlay.style.display = 'flex';
+            overlay.querySelector(".overlay-text").innerText = text;
+            overlay.style.display = "flex";
         }
-    }
+    },
 };
 
 const localLogic = {
@@ -211,15 +234,16 @@ const localLogic = {
 
         const mineHit = this.field[x][y];
         if (mineHit) {
-            console.log('Mine hit:', { x, y }); // Debug statement
+            /* console.log("Mine hit:", { x, y }); */
             return { mineHit: true, mines: await this.collectMines() };
         } else {
             const minesAround = await this.countMinesAround(x, y);
-            const emptyCells = minesAround > 0 ? undefined : await this.getEmptyCells(x, y);
+            const emptyCells =
+                minesAround > 0 ? undefined : await this.getEmptyCells(x, y);
 
             this.uncoveredCells[x][y] = true;
             if (emptyCells) {
-                emptyCells.forEach(cell => {
+                emptyCells.forEach((cell) => {
                     this.uncoveredCells[cell.x][cell.y] = true;
                 });
             }
@@ -228,8 +252,7 @@ const localLogic = {
             const totalCells = this.size * this.size;
             const mineCount = this.mines;
 
-            if (uncoveredCount === (totalCells - mineCount)) {
-                // User wins if all non-mine cells are uncovered
+            if (uncoveredCount === totalCells - mineCount) {
                 return { mineHit: false, minesAround, emptyCells, userWins: true };
             } else {
                 return { mineHit: false, minesAround, emptyCells };
@@ -315,6 +338,30 @@ const localLogic = {
         return done;
     },
     inList(list, element) {
-        return list.some(singleElement => singleElement.x === element.x && singleElement.y === element.y);
-    }
+        return list.some(
+            (singleElement) =>
+                singleElement.x === element.x && singleElement.y === element.y
+        );
+    },
+};
+
+const remoteLogic = {
+    url: "https://www2.hs-esslingen.de/~melcher/it/minesweeper/",
+    token: null,
+    async fetchAndDecode(request) {
+        return fetch(this.url + "?" + request).then((response) => response.json());
+    },
+    async init(size, mines) {
+        const query = `request=init&userid=mamiit03&size=${size}&mines=${mines}`;
+        const response = await this.fetchAndDecode(query);
+        this.token = response.token;
+        console.log("Response from init:", response);
+        return response;
+    },
+    async sweep(x, y) {
+        const query = `request=sweep&token=${this.token}&x=${x}&y=${y}`;
+        const response = await this.fetchAndDecode(query);
+        console.log("Server response:", response);
+        return response;
+    },
 };
