@@ -92,16 +92,16 @@ const minesweeper = {
     getCell(x, y) {
         return document.querySelector(`[data-x="${x}"][data-y="${y}"]`);
     },
-    async placeSymbol(x, y, symbol, mineHit) {
+    async placeSymbol(x, y, symbol, minesAround) {
         const cell = this.getCell(x, y);
         cell.classList.remove("covered", "flag");
 
         if (symbol) {
             cell.classList.add("symbol", symbol);
         }
-        if (mineHit) {
-            if (mineHit.minesAround) {
-                cell.classList.add("symbol", "s" + mineHit.minesAround);
+        if (minesAround !== undefined) {
+            if (minesAround > 0) {
+                cell.classList.add("symbol", "s" + minesAround);
             } else {
                 cell.classList.add("symbol", "emptySymbol");
             }
@@ -109,40 +109,49 @@ const minesweeper = {
     },
     async cellClicked(event) {
         if (this.gameover) return;
-
+    
         const x = parseInt(event.target.dataset.x);
         const y = parseInt(event.target.dataset.y);
         event.preventDefault();
         const cell = this.getCell(x, y);
-
+    
         if (cell.classList.contains("flag")) {
             cell.classList.remove("flag");
         } else {
-            const mineHit = await this.logic.sweep(x, y);
-
-            /* console.log("Clicked cell at:", x, y, "mineHit:", mineHit); */
-
-            if (mineHit.mineHit) {
-                console.log("Mine was hit at:", x, y);
-                this.displayOverlay("You lose!");
-                this.gameover = true;
-                event.target.classList.add("minehit");
-                await this.placeSymbol(x, y, "mine");
-
-                mineHit.mines.forEach(async (mine) => {
-                    await this.placeSymbol(mine.x, mine.y, "mine");
-                });
-            } else {
-                /* console.log("No mine hit at:", x, y); */
-                await this.placeSymbol(x, y, null, mineHit);
-                if (mineHit.emptyCells) {
-                    mineHit.emptyCells.forEach(
-                        async (cell) => await this.placeSymbol(cell.x, cell.y, null, cell)
-                    );
-                }
-                if (mineHit.userWins) {
-                    this.displayOverlay("You win!");
+            try {
+                const response = await this.logic.sweep(x, y);
+    
+                console.log("Clicked cell at:", x, y, "response:", response);
+    
+                if (response.minehit) {
+                    console.log("Mine was hit at:", x, y);
+                    this.displayOverlay("You lose!");
                     this.gameover = true;
+                    event.target.classList.add("minehit");
+                    await this.placeSymbol(x, y, "mine");
+    
+                    // Reveal all mines
+                    for (const mine of response.mines) {
+                        await this.placeSymbol(mine.x, mine.y, "mine");
+                    }
+                } else {
+                    await this.placeSymbol(x, y, null, response.minesAround);
+                    if (response.emptyCells) {
+                        for (const emptyCell of response.emptyCells) {
+                            await this.placeSymbol(emptyCell.x, emptyCell.y, null, emptyCell.minesAround);
+                        }
+                    }
+                    if (response.userwins) {
+                        this.displayOverlay("You win!");
+                        this.gameover = true;
+                    }
+                }
+            } catch (error) {
+                if (error.message === "Game Over") {
+                    this.displayOverlay("Game Over");
+                    this.gameover = true;
+                } else {
+                    console.error("Error during sweep:", error);
                 }
             }
         }
@@ -186,6 +195,7 @@ const minesweeper = {
         }
     },
 };
+
 
 const localLogic = {
     moveCounter: 0,
@@ -349,19 +359,41 @@ const remoteLogic = {
     url: "https://www2.hs-esslingen.de/~melcher/it/minesweeper/",
     token: null,
     async fetchAndDecode(request) {
-        return fetch(this.url + "?" + request).then((response) => response.json());
+        const response = await fetch(this.url + "?" + request);
+        if (!response.ok) {
+            if (response.status === 416) {
+                console.error("Game Over:", response.status, response.statusText);
+                throw new Error("Game Over");
+            } else {
+                console.error("Server error:", response.status, response.statusText);
+                throw new Error("Server error");
+            }
+        }
+        const data = await response.json();
+        return data;
     },
     async init(size, mines) {
         const query = `request=init&userid=mamiit03&size=${size}&mines=${mines}`;
         const response = await this.fetchAndDecode(query);
-        this.token = response.token;
-        console.log("Response from init:", response);
+        if (response && response.token) {
+            console.log("Response from init:", response);
+            this.token = response.token;
+        } else {
+            console.error("Failed to initialize token. Response:", response);
+            throw new Error("Token initialization failed");
+        }
         return response;
     },
     async sweep(x, y) {
+        if (!this.token) {
+            console.error("Token is null during sweep request");
+            throw new Error("Token is null");
+        }
         const query = `request=sweep&token=${this.token}&x=${x}&y=${y}`;
         const response = await this.fetchAndDecode(query);
-        console.log("Server response:", response);
+        if (response.status !== "ok") {
+            throw new Error(`Error during sweep: ${response.status}`);
+        }
         return response;
     },
 };
