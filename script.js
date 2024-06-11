@@ -95,7 +95,7 @@ const minesweeper = {
     async placeSymbol(x, y, symbol, minesAround) {
         const cell = this.getCell(x, y);
         cell.classList.remove("covered", "flag");
-
+    
         if (symbol) {
             cell.classList.add("symbol", symbol);
         }
@@ -103,7 +103,7 @@ const minesweeper = {
             if (minesAround > 0) {
                 cell.classList.add("symbol", "s" + minesAround);
             } else {
-                cell.classList.add("symbol", "emptySymbol");
+                cell.classList.add("emptySymbol");
             }
         }
     },

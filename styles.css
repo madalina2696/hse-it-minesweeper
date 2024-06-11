@@ -116,10 +116,16 @@
   
   .cell.symbol {
     background-image: url("images/symbols.svg");
-    background-size: 1000% 100%;  /* Adjust this value if needed */
+    background-size: 1000% 100%;
     background-repeat: no-repeat;
   }
   
+  .cell.emptySymbol {
+    background-color: #acacac;
+    border: var(--shadowsize) transparent solid;
+    background-image: none;
+}
+
   .cell.symbol.s1 {
     background-position: 0% 0%;
   }
